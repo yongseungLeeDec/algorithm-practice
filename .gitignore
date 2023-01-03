@@ -553,6 +553,9 @@ fabric.properties
 
 # Log file
 
+# Main class
+Main.java
+
 # BlueJ files
 *.ctxt
 
