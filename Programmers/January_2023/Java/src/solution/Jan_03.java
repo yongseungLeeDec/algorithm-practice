@@ -73,6 +73,37 @@ public class Jan_03 {
         return numTokens;
     }
 
+    public int solution_problem2_second(String s) {
+        int sLen = s.length();
+        int sameCharCount = 0;
+        int diffCharCount = 0;
+        int numTokens = 0;
+        char startChar = ' '; // 불가피한 초기화
+        boolean isStartOfSubS = true;
+
+        for (int i = 0; i < sLen; ++i) {
+            if (isStartOfSubS) {
+                startChar = s.charAt(i);
+                sameCharCount++;
+                numTokens++;
+                isStartOfSubS = false;
+                continue;
+            }
+
+            if (s.charAt(i) == startChar) {
+                sameCharCount++;
+            } else {
+                diffCharCount++;
+            }
+
+            if (sameCharCount == diffCharCount) {
+                isStartOfSubS = true;
+            }
+        }
+
+        return numTokens;
+    }
+
     /*
     문제 이름: 명예의 전당 (1)
     문제 링크: https://school.programmers.co.kr/learn/courses/30/lessons/138477
