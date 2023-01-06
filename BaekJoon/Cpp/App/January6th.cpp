@@ -19,3 +19,16 @@ int solution_problem1(vector<int> absolutes, vector<bool> signs) {
     }
     return answer;
 }
+
+// 내적
+// https://school.programmers.co.kr/learn/courses/30/lessons/70128
+int solution_problem2(vector<int> a, vector<int> b) {
+    int length = a.size();
+    int dotProduct = 0;
+
+    for (int i = 0; i < length; ++i) {
+        dotProduct += (a[i] * b[i]);
+    }
+
+    return dotProduct;
+}
