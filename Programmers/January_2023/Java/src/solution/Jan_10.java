@@ -1,9 +1,10 @@
 package solution;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Jan_10 {
-    public int[] solution(int N, int[] stages) {
+    public int[] solution_problem1(int N, int[] stages) {
         int[] numChallengingUsersPerStage = new int[N + 1];
 
         for (int stage : stages) {
@@ -50,4 +51,56 @@ public class Jan_10 {
 
         return resultInIntArray;
     }
+
+    public int solution_problem2(int[] nums) {
+        int primeSumCount = 0;
+        for (int f = 0; f < nums.length - 2; f++) {
+            for (int s = f + 1; s < nums.length - 1; s++) {
+                for (int t = s + 1; t < nums.length; t++) {
+                    if (isPrime(nums[f] + nums[s] + nums[t])) {
+                        primeSumCount++;
+                    }
+                }
+            }
+        }
+
+        return primeSumCount;
+    }
+
+
+
+    public int solution_problem3(int n) {
+        int answer = 0;
+        int[] cache = new int[n];
+
+        for (int i = 1; i < cache.length; i++) {
+            cache[i] = cache[i - 1];
+            if (isPrime(i + 1)) {
+                cache[i]++;
+            }
+        }
+
+        return cache[n - 1];
+    }
+
+    private boolean isPrime(int sum) {
+        if (sum == 2) {
+            return true;
+        }
+
+        if (sum % 2 == 0) {
+            return false;
+        }
+
+        int limit = (int) Math.sqrt(sum);
+
+        for (int i = 2; i <= limit; ++i) {
+            if (sum % i == 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }
