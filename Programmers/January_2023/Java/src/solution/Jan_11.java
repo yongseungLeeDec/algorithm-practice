@@ -66,4 +66,63 @@ public class Jan_11 {
 
         return strings;
     }
+
+    /*
+    문제 이름: [1차] 다트 게임
+    문제 링크: https://school.programmers.co.kr/learn/courses/30/lessons/17682
+    소요 시간: 18분 정도
+     */
+    public int solution_problem5(String dartResult) {
+        int[] scores = new int[3];
+        int i = 0;
+        int ptr = 0;
+        int score = 0;
+
+        while (i < scores.length) {
+
+            while (isCharNumber(dartResult.charAt(ptr))) {
+                score = (score * 10) + (dartResult.charAt(ptr) - '0');
+                ptr++;
+            }
+
+            switch (dartResult.charAt(ptr++)) {
+                case 'D':
+                    score = (int) Math.pow(score, 2);
+                    break;
+                case 'T':
+                    score = (int) Math.pow(score, 3);
+                    break;
+                default:
+                    break;
+            }
+
+            if (ptr < dartResult.length() && !isCharNumber(dartResult.charAt(ptr))) {
+                if (dartResult.charAt(ptr) == '*') {
+                    score *= 2;
+                    if (i != 0) {
+                        scores[i - 1] *= 2;
+                    }
+                } else {
+                    score *= -1;
+                }
+                ptr++;
+            }
+
+            scores[i] = score;
+            score = 0;
+            i++;
+        }
+
+        int sum = 0;
+
+        for (int s : scores) {
+            sum += s;
+        }
+
+        return sum;
+    }
+
+    private boolean isCharNumber(char c) {
+        return '0' <= c && c <= '9';
+    }
 }
