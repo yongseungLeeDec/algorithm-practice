@@ -29,7 +29,7 @@ public class Jan_04 {
 
     private int getNumDivisors(int number) {
         int numDivisors = 1;
-
+        int sqrt = (int) Math.sqrt(number);
         for (int i = 1; i <= number / 2; ++i) {
             if (number % i == 0) {
                 numDivisors++;
@@ -37,6 +37,28 @@ public class Jan_04 {
         }
 
         return numDivisors;
+    }
+
+    public int solution_problem1_improved(int number, int limit, int power) {
+        int ironCount = 0;
+        int[] divisorCounts = new int[number + 1];
+
+        for (int i = 1; i <= number; i++) {
+            int maxQuotient = number / i;
+            for (int j = 1; j <= maxQuotient; j++) {
+                divisorCounts[i * j]++;
+            }
+        }
+
+        for (int i = 1; i < divisorCounts.length; i++) {
+            if (divisorCounts[i] > limit) {
+                ironCount += power;
+            } else {
+                ironCount += divisorCounts[i];
+            }
+        }
+
+        return ironCount;
     }
 
     /*
