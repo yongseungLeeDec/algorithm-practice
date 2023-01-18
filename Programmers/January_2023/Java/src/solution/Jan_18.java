@@ -45,6 +45,11 @@ public class Jan_18 {
         return 0;
     }
 
+    /*
+    https://math.stackexchange.com/questions/1305375/what-is-the-next-number-having-the-same-number-of-bit-1s
+    Bit hack을 쓰거나
+    Integer. BitCount 라는 메소드를 쓰거나!
+     */
     public int solution(int n) {
         int answer = n;
         int nCompared = n + 1;
@@ -74,6 +79,27 @@ public class Jan_18 {
             }
 
             num = num >> 1;
+        }
+
+        return count;
+    }
+
+    /*
+    점화식을 만드는 능력!
+    https://www.geeksforgeeks.org/count-ways-express-number-sum-consecutive-numbers/
+    https://school.programmers.co.kr/learn/courses/30/lessons/12924
+     */
+    public int solution_3(int n) {
+        int sequenceLength = 1;
+        int count = 0;
+
+        while (n > (sequenceLength * (sequenceLength - 1)) / 2) {
+            double startNumber = (double) (n - (sequenceLength * (sequenceLength - 1)) / 2) / (double) sequenceLength;
+            if (startNumber - (int) startNumber == 0) {
+                count++;
+            }
+
+            sequenceLength++;
         }
 
         return count;
