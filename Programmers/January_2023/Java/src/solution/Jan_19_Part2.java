@@ -2,7 +2,7 @@ package solution;
 
 import java.util.Arrays;
 
-public class Jan19_Part2 {
+public class Jan_19_Part2 {
     /*
         드디어 풀었다 얘들아 체육복 좀 잃어버리지마..
         복습 필수!!
