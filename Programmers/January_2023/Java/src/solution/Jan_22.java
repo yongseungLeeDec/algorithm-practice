@@ -24,4 +24,37 @@ public class Jan_22 {
 
         return cache[n];
     }
+
+    public int solution_p3(int n) {
+        int[] cache = new int[Math.max(n + 1, 3)];
+        cache[1] = 1;
+        cache[2] = 1;
+
+        for (int i = 3; i <= n; ++i) {
+            if (i % 2 == 0) {
+                cache[i] = Math.min(cache[i - 1], cache[i / 2]);
+                continue;
+            }
+
+            cache[i] = cache[i - 1] + 1;
+        }
+
+        return cache[n];
+    }
+
+    public int solution_p3_memory_efficient(int n) {
+        int moveCount = 1;
+
+        while (n > 1) {
+            if (n % 2 == 0) {
+                n /= 2;
+                continue;
+            }
+
+            n -= 1;
+            moveCount++;
+        }
+
+        return moveCount;
+    }
 }
