@@ -12,4 +12,16 @@ public class Jan_22 {
 
         return matchCount;
     }
+
+    public long solution_p2(int n) {
+        long[] cache = new long[Math.max(n + 1, 3)];
+        cache[1] = 1;
+        cache[2] = 2;
+
+        for (int i = 3; i <= n; i++) {
+            cache[i] = (cache[i - 1] + cache[i - 2]) % 1234567L;
+        }
+
+        return cache[n];
+    }
 }
