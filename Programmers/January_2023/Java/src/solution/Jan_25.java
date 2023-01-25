@@ -63,4 +63,35 @@ public class Jan_25 {
 
         return matrix;
     }
+
+    /*
+    복습 좀 해~!
+     */
+    public int[] solution(int n, long left, long right) {
+        int[] array = new int[(int) (right - left + 1)];
+        int index = 0;
+
+        long k = (left / n) + 1;
+        long kRepeated = left % n;
+
+        while (index < array.length) {
+            while (index < array.length && kRepeated < k) {
+                array[index++] = (int) k;
+                kRepeated++;
+            }
+
+            /* 이 행이 문제였음 */
+            long val = kRepeated + 1;
+
+            while (index < array.length && val <= n) {
+                array[index++] = (int) val;
+                val++;
+            }
+
+            k += 1;
+            kRepeated = 0;
+        }
+
+        return array;
+    }
 }
