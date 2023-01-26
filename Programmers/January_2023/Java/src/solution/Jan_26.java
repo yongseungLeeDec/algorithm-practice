@@ -7,9 +7,82 @@ import java.util.StringTokenizer;
 
 public class Jan_26 {
     public String solution(String number, int k) {
-        String answer = "";
-        return answer;
+        int numLen = number.length();
+
+        boolean[] isDiscarded = new boolean[numLen];
+        int discardCount = 0;
+        int prevIndex = -1;
+        int index;
+
+        for (int i = 0; i < numLen - 1; ++i) {
+            char digit = number.charAt(i);
+            char nextDigit = number.charAt(i + 1);
+
+            if (digit > nextDigit) {
+                index = prevIndex + 1;
+
+                while (discardCount < k && index < i) {
+                    if (number.charAt(index) == digit) {
+                        break;
+                    }
+
+                    isDiscarded[index] = true;
+                    index++;
+                    discardCount++;
+                }
+
+                while (discardCount < k && prevIndex >= 0) {
+                    if (!isDiscarded[prevIndex] && number.charAt(prevIndex) < digit) {
+                        isDiscarded[prevIndex] = true;
+                        discardCount++;
+                    }
+                    prevIndex--;
+                }
+
+                prevIndex = i;
+            }
+        }
+
+        index = prevIndex + 1;
+
+        while (discardCount < k && index < numLen - 1) {
+            isDiscarded[index] = true;
+            index++;
+            discardCount++;
+        }
+
+        char digit = number.charAt(numLen - 1);
+        int altIndex = numLen - 1;
+
+        while (discardCount < k && prevIndex >= 0) {
+            if (!isDiscarded[prevIndex]) {
+                if (number.charAt(prevIndex) < digit) {
+                    isDiscarded[prevIndex] = true;
+                    discardCount++;
+                } else {
+                    isDiscarded[altIndex] = true;
+                    discardCount++;
+                    altIndex = prevIndex;
+                    digit = number.charAt(prevIndex);
+                }
+            }
+            prevIndex--;
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < numLen; i++) {
+            if (!isDiscarded[i]) {
+                sb.append(number.charAt(i));
+            }
+        }
+
+        return sb.toString();
     }
+
+
+    // 3 3312 3 -> 4개 버린다면? 3 3 3개 남은 걸 어디서 버릴 것인가?
+    // 321129
 
     public int[] solution_p2(String s) {
         String sr = s.replace("{", "");
