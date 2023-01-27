@@ -4,6 +4,67 @@ public class Jan_27 {
     /*
     https://school.programmers.co.kr/learn/courses/30/lessons/42883
      */
+
+
+
+    public String solution_try_2(String number, int k) {
+        int numLen = number.length();
+        boolean[] isDiscarded = new boolean[numLen];
+
+        number = number + ":";
+        int left = 0;
+        int right = left + 1;
+        int discardCount = 0;
+
+        while (discardCount < k) {
+            if (number.charAt(left) < number.charAt(right)) {
+                isDiscarded[left] = true;
+                discardCount++;
+
+                while (isDiscarded[left]) {
+                    left++;
+                }
+
+                if (left == right) {
+                    right = left + 1;
+                }
+
+                continue;
+            }
+
+            int iteratorIndex = left + 1;
+            right = iteratorIndex + 1;
+
+            while (iteratorIndex < right) {
+                if (!isDiscarded[iteratorIndex]
+                        && number.charAt(iteratorIndex) < number.charAt(right)) {
+                    isDiscarded[iteratorIndex] = true;
+                    discardCount++;
+                    break;
+                }
+                iteratorIndex++;
+            }
+
+            if (right == numLen) {
+                break;
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < numLen; i++) {
+            if (!isDiscarded[i]) {
+                sb.append(number.charAt(i));
+            }
+
+        }
+
+        String string = sb.toString();
+
+        return string.substring(0, string.length() - (k - discardCount));
+    }
+
+
     public String solution_try1(String number, int k) {
         int discardCount = 0;
         int discardLimit = k;
