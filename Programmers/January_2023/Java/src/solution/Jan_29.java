@@ -1,70 +1,73 @@
 package solution;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.PriorityQueue;
+
+import java.util.*;
 
 public class Jan_29 {
     public int solution(int N, int[][] road, int K) {
-        HashMap<Integer, PriorityQueue<Node>> map = getMap(road);
-        HashSet<Integer> traversedTowns = new HashSet<>();
-        HashMap<Integer, Integer> minimalDistances = initializeMinimalDistanceMapping(N);
+        HashMap<Integer, HashMap<Integer, Integer>> map = getMap(road);
+        HashMap<Integer, Integer> minDistances = initializeMinDistances(N);
 
-        travelMap(1, 0, minimalDistances, traversedTowns, map);
+        PriorityQueue<Node> visitingQueue = new PriorityQueue<>(Comparator.comparingInt(node -> node.distance));
+        visitingQueue.add(new Node(1, 0));
 
-        return (int) minimalDistances.values().stream().filter(value -> value <= K).count();
-    }
+        while (!visitingQueue.isEmpty()) {
+            Node town = visitingQueue.poll();
+            Integer townNum = town.townNum;
+            Integer distance = town.distance;
 
-    private void travelMap(Integer currentTown,
-                           int takenHours,
-                           HashMap<Integer, Integer> minimalDistances,
-                           HashSet<Integer> traversedTowns,
-                           HashMap<Integer, PriorityQueue<Node>> map) {
+            if (minDistances.get(townNum) < distance) {
+                continue;
+            }
 
-        if (minimalDistances.get(currentTown) < takenHours) {
-            return;
-        }
+            HashMap<Integer, Integer> neighbors = map.get(townNum);
 
-        traversedTowns.add(currentTown);
-        minimalDistances.put(currentTown, takenHours);
+            for (Integer neighbor : neighbors.keySet()) {
+                Integer newDist = distance + neighbors.get(neighbor);
 
-        PriorityQueue<Node> connections = map.get(currentTown);
+                if (newDist < minDistances.get(neighbor)) {
+                    minDistances.put(neighbor, newDist);
+                    visitingQueue.add(new Node(neighbor, newDist));
+                }
 
-        while (!connections.isEmpty()) {
-            Node connection = connections.poll();
-            if (!traversedTowns.contains(connection.townNum)) {
-                travelMap(connection.townNum, takenHours + connection.distance, minimalDistances, traversedTowns, map);
             }
         }
 
-        traversedTowns.remove(currentTown);
+        return (int) minDistances.values().stream().filter(value -> value <= K).count();
     }
 
-    public HashMap<Integer, PriorityQueue<Node>> getMap(int[][] road) {
-        HashMap<Integer, PriorityQueue<Node>> map = new HashMap<>();
+    private static HashMap<Integer, HashMap<Integer, Integer>> getMap(int[][] road) {
+        HashMap<Integer, HashMap<Integer, Integer>> map = new HashMap<>();
 
         for (int[] r : road) {
             int sour = r[0];
             int dest = r[1];
             int dist = r[2];
 
-            map.computeIfAbsent(sour, k -> new PriorityQueue<>(Comparator.comparingInt((Node n) -> n.distance)));
-            map.computeIfAbsent(dest, k -> new PriorityQueue<>(Comparator.comparingInt((Node n) -> n.distance)));
+            map.computeIfAbsent(sour, k -> new HashMap<>());
+            map.computeIfAbsent(dest, k -> new HashMap<>());
 
-            map.get(sour).add(new Node(dest, dist));
-            map.get(dest).add(new Node(sour, dist));
+            map.get(sour).putIfAbsent(dest, Integer.MAX_VALUE);
+            map.get(dest).putIfAbsent(sour, Integer.MAX_VALUE);
+
+            int currDist = map.get(sour).get(dest);
+            int renewedDist = Math.min(currDist, dist);
+
+            if (renewedDist < currDist) {
+                map.get(sour).put(dest, renewedDist);
+                map.get(dest).put(sour, renewedDist);
+            }
         }
 
         return map;
     }
 
-    private HashMap<Integer, Integer> initializeMinimalDistanceMapping(int numTowns) {
+    private HashMap<Integer, Integer> initializeMinDistances(int numTowns) {
         HashMap<Integer, Integer> mapping = new HashMap<>(numTowns);
+
         mapping.put(1, 0);
 
         int townNum = 2;
-
         while (townNum <= numTowns) {
             mapping.put(townNum, Integer.MAX_VALUE);
             townNum++;
@@ -81,8 +84,6 @@ public class Jan_29 {
             this.townNum = townNum;
             this.distance = distance;
         }
-
-
     }
 
 }
