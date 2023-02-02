@@ -6,19 +6,7 @@ import java.util.HashSet;
 
 public class Feb_1 {
     public int solution(int n, int[][] wires) {
-        HashMap<Integer, HashSet<Integer>> grid = new HashMap<>();
-
-        for (int[] wire : wires) {
-            int t1 = wire[0];
-            int t2 = wire[1];
-
-            grid.computeIfAbsent(t1, t -> new HashSet<>());
-            grid.computeIfAbsent(t2, t -> new HashSet<>());
-
-            grid.get(t1).add(t2);
-            grid.get(t2).add(t1);
-        }
-
+        HashMap<Integer, HashSet<Integer>> grid = getGrid(wires);
         int minGridSizeDiff = Integer.MAX_VALUE;
         int v1;
         int v2;
@@ -73,36 +61,48 @@ public class Feb_1 {
         }
     }
 
-//    int N, min;
-//    int[][] map;
-//    int[] vst;
-//    int dfs(int n){
-//        vst[n] = 1;
-//        int child = 1;
-//
-//        for(int i = 1; i <= N; i++) {
-//            if(vst[i] == 0 && map[n][i] == 1) {
-//                child += dfs(i);
-//            }
-//        }
-//        min = Math.min(min, Math.abs(child - (N - child)));
-//        return child;
-//    }
-//    public int solution_smart(int n, int[][] wires) {
-//        N = n;
-//        min = n;
-//        map = new int[n+1][n+1];
-//        vst = new int[n+1];
-//
-//        for(int[] wire : wires) {
-//            int a = wire[0], b = wire[1];
-//            map[a][b] = map[b][a] = 1;
-//        }
-//
-//        dfs(1);
-//
-//        return min;
-//    }
+    /*
+    Let's make a smart solution
+     */
+    private static int MIN = Integer.MAX_VALUE;
+    public int solution_smart(int n, int[][] wires) {
+        HashMap<Integer, HashSet<Integer>> grid = getGrid(wires);
+        HashSet<Integer> traversed = new HashSet<>();
+        traverseGrid(1, new HashSet<>(), grid);
 
+        return MIN;
+    }
 
+    private int traverseGrid(int startTowerNumber, HashSet<Integer> traversed, HashMap<Integer, HashSet<Integer>> grid) {
+        int numConnected = 1;
+        traversed.add(startTowerNumber);
+        HashSet<Integer> connectedTowers = grid.get(startTowerNumber);
+
+        for (Integer tower : connectedTowers) {
+            if (!traversed.contains(tower)) {
+                numConnected += traverseGrid(tower, traversed, grid);
+            }
+        }
+
+        MIN = Math.min(MIN, Math.abs(numConnected - (grid.size() - numConnected)));
+
+        return numConnected;
+    }
+
+    private HashMap<Integer, HashSet<Integer>> getGrid(int[][] wires) {
+        HashMap<Integer, HashSet<Integer>> grid = new HashMap<>();
+
+        for (int[] wire : wires) {
+            int t1 = wire[0];
+            int t2 = wire[1];
+
+            grid.computeIfAbsent(t1, t -> new HashSet<>());
+            grid.computeIfAbsent(t2, t -> new HashSet<>());
+
+            grid.get(t1).add(t2);
+            grid.get(t2).add(t1);
+        }
+
+        return grid;
+    }
 }
