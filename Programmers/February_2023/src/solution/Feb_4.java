@@ -1,6 +1,7 @@
 package solution;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.PriorityQueue;
 
 public class Feb_4 {
@@ -26,5 +27,25 @@ public class Feb_4 {
         }
 
         return kindCount;
+    }
+
+    public int solution(int[] elements) {
+        HashSet<Integer> sums = new HashSet<>();
+        int length = 1;
+        int[] cache = new int[elements.length];
+//        System.arraycopy(elements, 0, cache, 0, elements.length); <== This shouldn't be here.
+
+        while (length <= elements.length) {
+            for (int i = 0; i < elements.length; i++) {
+                int tailIndex = (i + (length - 1)) % elements.length;
+
+                cache[i] += elements[tailIndex];
+                sums.add(cache[i]);
+            }
+
+            length++;
+        }
+
+        return sums.size();
     }
 }
