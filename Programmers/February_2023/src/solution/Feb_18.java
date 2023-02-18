@@ -2,6 +2,8 @@ package solution;
 
 public class Feb_18 {
     public int solution(String[][] book_time) {
+        // 참고 링크: https://school.programmers.co.kr/learn/courses/30/lessons/155651
+
         int[] times = new int[24 * 60 + 10];
 
         for (String[] bt : book_time) {
@@ -9,7 +11,7 @@ public class Feb_18 {
             int endTimeValue = calculateTimeValue(bt[1]) + 10;
 
             times[startTimeValue] += 1;
-            times[endTimeValue] -= 1;
+            times[endTimeValue] -= 1; // 10:20 퇴실(청소 끝) -> 10:20 입실 가능하므로 굳이 +1 안 해도 괜찮은...
         }
 
         int max = 0;
