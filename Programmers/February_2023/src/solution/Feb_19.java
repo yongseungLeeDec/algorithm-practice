@@ -1,6 +1,8 @@
 package solution;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class Feb_19 {
     public int solution(int[][] data, int col, int row_begin, int row_end) {
@@ -26,5 +28,53 @@ public class Feb_19 {
         }
 
         return s;
+    }
+
+    public static int[] solution(long begin, long end) {
+        int[] answer = new int[(int) (end - begin + 1)];
+
+        int k = (int) begin;
+
+        for (int i = 0; i < answer.length; i++) {
+            answer[i] = getDivisor(k);
+            k++;
+        }
+
+        return answer;
+    }
+
+    private static int getDivisor(int num) {
+        if (num == 1) {
+            return 0;
+        }
+
+        if (num <= 20000000 && (num & 1) == 0) {
+            return num >> 1;
+        }
+
+        ArrayList<Integer> divs = new ArrayList<>();
+        double sqrt = Math.sqrt(num);
+
+        for (int div = 1; div <= sqrt; div++) {
+            if (num % div == 0) {
+                divs.add(div);
+                if (div != sqrt) {
+                    divs.add(num / div);
+                }
+            }
+        }
+
+        Collections.sort(divs);
+
+        int index = 0;
+        int size = divs.size();
+        int max = 1;
+
+        while (index < size - 1 && divs.get(index) <= 10000000) {
+            max = divs.get(index);
+            index++;
+        }
+
+        return max;
     }
 }
